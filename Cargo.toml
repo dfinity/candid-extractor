@@ -1,0 +1,16 @@
+[package]
+name = "candid-extractor"
+version = "0.1.5-alpha.1"
+authors = ["DFINITY Stiftung <sdk@dfinity.org>"]
+edition = "2021"
+repository = "https://github.com/dfinity/candid-extractor"
+license = "Apache-2.0"
+description = "A CLI tool to extract the Candid interface from a Canister WASM."
+readme = "README.md"
+categories = ["development-tools"]
+keywords = ["internet-computer", "wasm", "dfinity", "canister", "cdk"]
+
+[dependencies]
+anyhow = "1"
+wasmtime = "25"
+clap = { version = "4", features = ["derive"] }
