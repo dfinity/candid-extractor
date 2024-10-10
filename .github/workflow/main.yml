@@ -1,0 +1,78 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache cargo build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+      - name: build
+        run: cargo build
+      - name: test
+        run: cargo test
+      - name: fmt
+        run: cargo fmt --all -- --check
+      - name: lint
+        run: cargo clippy --tests -- -D clippy::all
+
+  release:
+    runs-on: ${{ matrix.os }}
+    if: github.ref_type == 'tag'
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            binstall_pkg: candid-extractor-x86_64-unknown-linux-gnu.tar.gz
+          - os: macos-14-large
+            binstall_pkg: candid-extractor-x86_64-apple-darwin.tar.gz
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+      - name: build
+        run: |
+          cargo build -p candid-extractor --release --locked
+      - name: Bundle
+        run: |
+          cp target/release/candid-extractor .
+          chmod +x candid-extractor
+          tar -cvzf ${{ matrix.binstall_pkg }} candid-extractor
+      - name: Upload release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ matrix.binstall_pkg }}
+          asset_name: ${{ matrix.binstall_pkg }}
+          tag: ${{ github.ref }}
