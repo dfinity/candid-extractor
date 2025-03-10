@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [0.1.6] - 2025-03-10
+
+### Changed
+
+- Upgraded `wasmtime` from v26 to v30.0.2.
+- Updated `Cargo.lock` to resolve yanked versons of indirect dependencies.
+
 ## [0.1.5] - 2024-10-28
 
 ### Added

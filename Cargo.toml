@@ -1,6 +1,6 @@
 [package]
 name = "candid-extractor"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["DFINITY Stiftung <sdk@dfinity.org>"]
 edition = "2021"
 repository = "https://github.com/dfinity/candid-extractor"
