@@ -12,5 +12,5 @@ keywords = ["internet-computer", "wasm", "dfinity", "canister", "cdk"]
 
 [dependencies]
 anyhow = "1"
-wasmtime = "26"
+wasmtime = "30.0.2"
 clap = { version = "4", features = ["derive"] }
