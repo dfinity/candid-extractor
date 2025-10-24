@@ -44,7 +44,7 @@ fn extract(bytes: impl AsRef<[u8]>) -> Result<String> {
         let get_candid_pointer = canister
             .get_typed_func::<(), i64>(&mut store, "get_candid_pointer")
             .with_context(|| {
-                "Failed to find the function export 'get_candid_pointer' which returns i64"
+                "Failed to find the function export 'get_candid_pointer' which returns i64 (did you export the Candid interface?)"
             })?;
         let candid_pointer = get_candid_pointer
             .call(&mut store, ())
@@ -54,7 +54,7 @@ fn extract(bytes: impl AsRef<[u8]>) -> Result<String> {
         let get_candid_pointer = canister
             .get_typed_func::<(), i32>(&mut store, "get_candid_pointer")
             .with_context(|| {
-                "Failed to find the function export 'get_candid_pointer' which returns i32"
+                "Failed to find the function export 'get_candid_pointer' which returns i32 (did you export the Candid interface?)"
             })?;
         let candid_pointer = get_candid_pointer
             .call(&mut store, ())
